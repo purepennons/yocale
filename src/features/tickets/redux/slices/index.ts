@@ -11,8 +11,10 @@ const initialState = {
 	tickets: [],
 } as TicketsState;
 
-const fetchAllTickets = createAsyncThunk("tickets/fetchAllTickets", async () =>
-	axios.get("http://localhost:3004/tickets")
+const fetchAllTickets = createAsyncThunk("tickets/fetchAllTickets", async () => {
+		const res = await axios.get("http://localhost:3004/tickets")
+		return res.data
+	}
 );
 
 const appSlice = createSlice({
@@ -22,7 +24,7 @@ const appSlice = createSlice({
 	extraReducers: {
 		// @ts-ignore
 		[fetchAllTickets.fulfilled]: (state, { payload }) => {
-			state.tickets = payload.data;
+			state.tickets = payload;
 		},
 	},
 });

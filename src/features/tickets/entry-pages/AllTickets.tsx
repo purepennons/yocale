@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { fetchAllTickets as fetchAllTicketsAction } from "../redux/slices";
@@ -11,13 +11,38 @@ interface Ticket {
 }
 
 export default function AllTickets() {
-	const { tickets } = usePageProps();
+	const { tickets, actions } = usePageProps();
 	return (
 		<div>
 			<h1>Page: All Tickets</h1>
+			{/*@ts-ignore*/}
+			<div onChange={actions.onFilterChange}>
+				<h2>Filter by Status:</h2>
+				<label>
+					<input
+						defaultChecked
+						type="radio"
+						value="status"
+						name="status"
+					/>
+					all
+				</label>
+				<label>
+					<input type="radio" value="assigned" name="status" />
+					assigned
+				</label>
+				<label>
+					<input type="radio" value="completed" name="status" />
+					completed
+				</label>
+				<label>
+					<input type="radio" value="unassigned" name="status" />
+					unassigned
+				</label>
+			</div>
 			<ol>
 				{tickets.map((ticket: Ticket) => (
-					<li key={ticket.id}>
+					<li key={ticket.number}>
 						<p>ticket-number: {ticket.number}</p>
 						<p>assignee: {ticket.userId}</p>
 						<p>status: {ticket.status}</p>
@@ -28,10 +53,24 @@ export default function AllTickets() {
 	);
 }
 
+export function filterTicketsByStatus(status: string, tickets: [Ticket]) {
+	const allowedFilters = ["assigned", "completed", "unassigned"];
+	if (!allowedFilters.includes(status)) {
+		return tickets;
+	}
+
+	return tickets.filter((ticket) => ticket.status === status);
+}
+
 function usePageProps() {
 	const dispatch = useDispatch();
 	// @ts-ignore
-	const tickets = useSelector((state) => state.tickets.tickets);
+	const allTickets = useSelector((state) => state.tickets.tickets);
+	const [currentFilter, setFilter] = useState("all");
+	const onFilterChange = (event: { target: { value: string } }) => {
+		setFilter(event.target.value);
+	};
+
 	// @ts-ignore
 	const fetchAllTickets = () => dispatch(fetchAllTicketsAction());
 
@@ -40,6 +79,9 @@ function usePageProps() {
 	}, []);
 
 	return {
-		tickets,
+		tickets: filterTicketsByStatus(currentFilter, allTickets),
+		actions: {
+			onFilterChange,
+		},
 	};
 }
