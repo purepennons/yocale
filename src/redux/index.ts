@@ -2,9 +2,11 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { createLogger } from "redux-logger";
 
 import { reducer as appReducer } from "./slices/app";
+import { reducer as ticketsReducer } from '../features/tickets/redux/slices/'
 
 const rootReducer = combineReducers({
 	app: appReducer,
+	tickets: ticketsReducer
 });
 
 export const store = configureStore({
