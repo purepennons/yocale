@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from 'react-router-dom'
 
 import { fetchAllTickets as fetchAllTicketsAction } from "../redux/slices";
+
+import styles from './AllTickets.module.css'
 
 interface Ticket {
 	id: number;
@@ -42,10 +45,11 @@ export default function AllTickets() {
 			</div>
 			<ol>
 				{tickets.map((ticket: Ticket) => (
-					<li key={ticket.number}>
+					<li key={ticket.number} className={styles.ticket}>
 						<p>ticket-number: {ticket.number}</p>
 						<p>assignee: {ticket.userId}</p>
 						<p>status: {ticket.status}</p>
+						<Link to={ticket.number}>See Detail Page</Link>
 					</li>
 				))}
 			</ol>
