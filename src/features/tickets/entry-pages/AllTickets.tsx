@@ -53,7 +53,7 @@ export default function AllTickets() {
 	);
 }
 
-export function filterTicketsByStatus(status: string, tickets: [Ticket]) {
+export function filterTicketsByStatus(status: string, tickets: Ticket[]) {
 	const allowedFilters = ["assigned", "completed", "unassigned"];
 	if (!allowedFilters.includes(status)) {
 		return tickets;
