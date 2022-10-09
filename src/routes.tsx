@@ -16,6 +16,7 @@ export default function getRoutes() : [{}] {
 				...getUserRoutes(),
 				...getTicketsRoutes(),
 			],
+			errorElement: <div>Error!</div>
 		},
 	];
 }
