@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 
 interface TicketsState {
 	loading: "pending" | "idle";
@@ -11,11 +10,9 @@ const initialState = {
 	tickets: [],
 } as TicketsState;
 
-const fetchAllTickets = createAsyncThunk("tickets/fetchAllTickets", async () => {
-		const res = await axios.get("http://localhost:3004/tickets")
-		return res.data
-	}
-);
+const fetchAllTickets = createAsyncThunk("tickets/fetchAllTickets", () => {
+	return fetch("http://localhost:3004/tickets").then((res) => res.json());
+});
 
 const appSlice = createSlice({
 	name: "tickets",
